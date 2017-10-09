@@ -5,6 +5,10 @@
  */
 package calloperatorslist;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Scanner;
+
 /**
  *
  * @author dhaffner
@@ -19,6 +23,9 @@ public class Record {
     /* případná poznámka */
     private String notice = "";
     
+    
+    public Record () {
+    }
     
     public Record (String firstName, String surname, String phoneNumber, String notice) {
         this.firstName = firstName;
@@ -86,12 +93,58 @@ public class Record {
     }
     
     
-    /* metoda zkontroluje .... */
+    /** metoda zkontroluje platnost tel. čísla a příp. umožní opravu */
+    public String phoneNumberCheck (String phoneNumber) {
+        phoneNumber.replaceAll("\\D", "");   // všechny nečíslice pryč
+        
+        if (phoneNumber.length() == 9) {     // při 9 číslicích přidá předvolbu ČR
+            phoneNumber = "420" + phoneNumber;
+        }
+        
+        if (phoneNumber.length() != 12) {    // když nesedí délka, umožní opravu 
+            System.out.println("The phone number is wrong.");
+            System.out.println("Insert it once again, please: ");
+            
+            try {
+            Scanner sc = new Scanner (System.in); //umožní znovuzadat ...
+            phoneNumber = sc.nextLine();
+            }
+            catch (Exception e) {
+                System.out.println("Error when inserting ...");
+            }
+            phoneNumberCheck(phoneNumber);        // ... a znovu zkontroluje
+        }
+            
+        return phoneNumber;
+    }
     
-    /* metoda zapíše daný záznam do souboru */
+    /** metoda převede tel. číslo na požadovaný formát */
+    public String phoneNumberFormat (String phoneNumber) {
+        char[] chars = phoneNumber.toCharArray();
+        phoneNumber = "+" + chars[0] + chars[1] + chars[2] + " " + chars[3]
+                + chars[4] + chars[5] + " " + chars[6] + chars[7] + chars[8]
+                + " " + chars[9] + chars[10] + chars[11];
+        return phoneNumber;
+    }    
+   
+    /** metoda vrátí název souboru pro zápis záznamu */
+    public String fNameDeclare() {
+        return this.getSurname() +"_"+ this.getFirstName() + ".TXT";
+    }
     
-    
-    
-    
-    
+    /** metoda zapíše do souboru */
+    public void fileWrite(String fileName) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+            bw.write(this.getFirstName());
+            bw.write(" ");
+            bw.write(this.getSurname());
+            bw.newLine();
+            bw.write(this.getPhoneNumber());
+            bw.newLine();
+            bw.write(this.getNotice());
+            bw.flush();
+        } catch (Exception e) {
+            System.err.println("Error when trying to write into the file");
+        }
+    }
 }
