@@ -95,27 +95,28 @@ public class Record {
     
     /** metoda zkontroluje platnost tel. čísla a příp. umožní opravu */
     public String phoneNumberCheck (String phoneNumber) {
-        phoneNumber.replaceAll("\\D", "");   // všechny nečíslice pryč
+        String pNumber = phoneNumber.replaceAll("\\D", "");   // všechny nečíslice pryč
+        System.out.println("Po vyhození nečíslic: " + pNumber); //pomocný práskač
         
-        if (phoneNumber.length() == 9) {     // při 9 číslicích přidá předvolbu ČR
-            phoneNumber = "420" + phoneNumber;
+        if (pNumber.length() == 9) {     // při 9 číslicích přidá předvolbu ČR
+            pNumber = "420" + pNumber;
         }
         
-        if (phoneNumber.length() != 12) {    // když nesedí délka, umožní opravu 
+        if (pNumber.length() != 12) {    // když nesedí délka, umožní opravu 
             System.out.println("The phone number is wrong.");
             System.out.println("Insert it once again, please: ");
-            
+             
             try {
             Scanner sc = new Scanner (System.in); //umožní znovuzadat ...
-            phoneNumber = sc.nextLine();
+            pNumber = sc.nextLine();
             }
             catch (Exception e) {
                 System.out.println("Error when inserting ...");
             }
-            phoneNumberCheck(phoneNumber);        // ... a znovu zkontroluje
+            pNumber = phoneNumberCheck(pNumber);        // ... a znovu zkontroluje
         }
             
-        return phoneNumber;
+        return pNumber;
     }
     
     /** metoda převede tel. číslo na požadovaný formát */

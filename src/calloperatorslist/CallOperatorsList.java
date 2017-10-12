@@ -63,6 +63,7 @@ public class CallOperatorsList {
                     
                         //uloží záznam do souboru
                         record.fileWrite(fileName);
+                        System.out.println("Záznam telefon: " + record.getPhoneNumber()); //pomocný práskač
                     
                         break;
                     
